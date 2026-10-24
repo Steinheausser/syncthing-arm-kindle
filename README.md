@@ -42,9 +42,26 @@ In a 10 s CPU profile during a 128 MiB pull on the Kindle:
 Requires Go 1.27+, Zig 0.17+ (`zig cc`), Python 3, and Git:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File syncthing-arm\build.ps1
+powershell -ExecutionPolicy Bypass -File build.ps1
 ```
 
 Outputs:
-- `syncthing-arm/out/crypto-test`: standalone on-device correctness & throughput test
-- `syncthing-arm/out/syncthing-patched`: static `linux/arm` Syncthing v2.1.2 binary
+- `out/crypto-test`: standalone on-device correctness & throughput test
+- `out/syncthing-patched`: static `linux/arm` Syncthing v2.1.2 binary
+
+## Install on a Kindle with KOReader
+
+Copy `out/syncthing-patched` to `/mnt/us/` (over USB or scp) and stop
+Syncthing from KOReader's menu. Then, over SSH, keep the stock binary and put
+the patched one in its place:
+
+```sh
+cd /mnt/us/koreader/plugins/syncthing.koplugin
+cp syncthing syncthing.stock
+cp /mnt/us/syncthing-patched syncthing && chmod +x syncthing
+```
+
+## License
+
+The files under `overlay/` are modified Go and `golang.org/x/crypto` sources,
+under Go's BSD license (`LICENSE-GO`).
